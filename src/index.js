@@ -1,17 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import SeasonDisplay from './SeasonDisplay'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class App extends React.Component {
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    state = {
+          lat: null, 
+          errorMessage: ''
+    }
+
+    componentDidMount() {
+        window.navigator.geolocation.getCurrentPosition(
+            (position) => {
+                this.setState({
+                    lat: position.coords.latitude
+                })
+            }, 
+            (err) => {
+                this.setState({
+                    errorMessage: err.message
+                })
+            }
+        )
+    }
+
+    render() {    
+        return <div>
+        
+        {
+            this.state.errorMessage && <p>Error: {this.state.errorMessage}</p> 
+        }
+        
+         </div>
+    }
+}
+
+ReactDOM.render(<App />,document.querySelector('#root'))
